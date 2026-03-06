@@ -20,6 +20,67 @@ class PageWrapper {
 
         this.trace = [];
         this.traceRecording = false;
+        
+        this.trafficLogFile = null;
+        this.uniqueApis = new Set();
+    }
+
+    enableTrafficLogging(filepath) {
+        this.trafficLogFile = filepath;
+        // Ensure directory exists
+        const dir = path.dirname(filepath);
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        
+        this.page.on('response', async (response) => {
+            try {
+                const request = response.request();
+                const url = response.url();
+                const method = request.method();
+                
+                // Identify unique API (Method + Path, ignoring query params)
+                let parsedUrl;
+                try {
+                    parsedUrl = new URL(url);
+                } catch (e) {
+                    return; // Skip invalid URLs
+                }
+                
+                const apiSignature = `${method} ${parsedUrl.origin}${parsedUrl.pathname}`;
+                let isUnique = false;
+                
+                if (!this.uniqueApis.has(apiSignature)) {
+                    this.uniqueApis.add(apiSignature);
+                    isUnique = true;
+                }
+
+                // Prepare log entry
+                const logEntry = {
+                    timestamp: new Date().toISOString(),
+                    isUnique: isUnique,
+                    request: {
+                        url: url,
+                        method: method,
+                        headers: request.headers(),
+                        postData: request.postData()
+                    },
+                    response: {
+                        status: response.status(),
+                        headers: response.headers(),
+                        // Body might be too large or binary, so we might want to be careful here.
+                        // For now, let's skip body to keep it lightweight, or we can add it if needed.
+                        // body: await response.text().catch(() => '[Binary or Error]') 
+                    }
+                };
+
+                fs.appendFileSync(this.trafficLogFile, JSON.stringify(logEntry) + '
+');
+                
+            } catch (error) {
+                console.error(errorColor('[!] Error logging traffic:', error));
+            }
+        });
     }
 
     async addBlackWidowScripts() {

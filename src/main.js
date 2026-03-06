@@ -32,8 +32,8 @@ const MainModule = require('./modules/main-module'),
         .option('-u, --username <user>', 'log in with the specified username')
         .option('-p, --password <pass>', 'log in with the specified password')
         .option('-f, --taskfile <filepath>', 'use a custom task file instead of /input/default-tasks.txt')
-        .option('-e, --eval <jsfile>', 'evaluate the crawler\'s performance using custom JS tests')
-        .parse();
+        .option('-e, --eval <jsfile>', 'evaluate the crawler\'s performance using custom JS tests')        .option('--token-usage-file <filepath>', 'file path to log token usage', './output/token_usage.csv')
+        .option('--traffic-log-file <filepath>', 'file path to log network traffic', './output/traffic_log.jsonl')        .parse();
 
     // Setup timeout after which the crawler is terminated
     if (program.opts().timeout !== undefined) {

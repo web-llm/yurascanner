@@ -41,6 +41,12 @@ class LLMBridge {
                 baseURL: program.opts().modelEndpoint
             });
         }
+        
+        this.tokenUsageCallback = null;
+    }
+
+    setTokenUsageCallback(callback) {
+        this.tokenUsageCallback = callback;
     }
 
 
@@ -148,6 +154,15 @@ class LLMBridge {
         }
 
         let reply = completion.choices[0].message.content;
+
+        if (completion.usage && this.tokenUsageCallback) {
+            this.tokenUsageCallback({
+                model: completion.model,
+                prompt_tokens: completion.usage.prompt_tokens,
+                completion_tokens: completion.usage.completion_tokens,
+                total_tokens: completion.usage.total_tokens
+            });
+        }
 
         //console.log("TOKENS USED:", completion.data.usage.total_tokens);
 
