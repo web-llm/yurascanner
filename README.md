@@ -72,16 +72,19 @@ instance. As shown in the figure, it uses the Actions Mapping to translate the n
 A typical command for running YuraScanner on the admin dashboard of a locally hosted web application may look like this:
 
 ```bash
-yurascanner http://localhost/admin/ --username admin --password password --gpt4 --autotask --headless --screenshot -t 60
+yurascanner http://localhost/admin/ --username admin --password password --model gpt-4 --autotask --headless --screenshot -t 60
 ```
 
 We explain the specified options in the following:
 * `--username` and `--password` can be used to specify the (admin) credentials for the application. The automated login function of YuraScanner then tries to find and submit a login form on the given starting page. The session is automatically re-authenticated by logging in again (if necessary) after each finished task.
-* `--gpt4` specifies that OpenAI GPT-4 should be used instead of the default GPT-3.5 Turbo. GPT-4 is more expensive, but also performs significantly better than GPT-3.5 Turbo. Hence, it is recommended to use this flag.
+* `--model` specifies the LLM model to use (e.g., `gpt-4`, `gpt-3.5-turbo`). It is recommended to use a capable model like GPT-4 for better performance.
+* `--model-endpoint` (optional) allows specifying a custom OpenAI-compatible API endpoint (e.g., `https://api.example.com/v1`).
 * `--autotask` tells YuraScanner to automatically generate a list of tasks for the web application using an LLM. Alternatively, a custom task file can be specified via `--taskfile <path>`. 
 * `--headless` has to be used when executing on a server without a GUI.
 * `--screenshot` saves an image of the current browser window after each step. For easier reference, the current task is embedded as text inside each screenshot.
 * `-t`: Timeout in minutes.
+* `--token-usage-file` specifies the file path to log token usage (default: `./output/token_usage.csv`).
+* `--traffic-log-file` specifies the file path to log network traffic (default: `./output/traffic_log.jsonl`).
 
 A complete list of the supported command-line options can be obtained via: 
 ```bash
