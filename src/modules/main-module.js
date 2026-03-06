@@ -97,8 +97,7 @@ class MainModule {
         if (this.tokenUsageFile) {
             // Initialize file with header if it doesn't exist
             if (!fs.existsSync(this.tokenUsageFile)) {
-                fs.writeFileSync(this.tokenUsageFile, 'timestamp,model,prompt_tokens,completion_tokens,total_tokens
-');
+                fs.writeFileSync(this.tokenUsageFile, 'timestamp,model,prompt_tokens,completion_tokens,total_tokens\n');
             }
             this.llmBridge.setTokenUsageCallback((usage) => {
                 const logEntry = `${new Date().toISOString()},${usage.model},${usage.prompt_tokens},${usage.completion_tokens},${usage.total_tokens}

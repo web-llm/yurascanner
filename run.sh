@@ -5,4 +5,6 @@ node src/main.js https://metaso.cn \
   --model-endpoint https://tianshu.tones-ai.com/v1/ \
   --autotask \
   --screenshot \
+  --token-usage-file ./output/token_usage.csv \
+  --traffic-log-file ./output/traffic_log.jsonl \
   -t 60

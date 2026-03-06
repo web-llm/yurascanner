@@ -74,8 +74,7 @@ class PageWrapper {
                     }
                 };
 
-                fs.appendFileSync(this.trafficLogFile, JSON.stringify(logEntry) + '
-');
+                fs.appendFileSync(this.trafficLogFile, JSON.stringify(logEntry) + '\n');
                 
             } catch (error) {
                 console.error(errorColor('[!] Error logging traffic:', error));
