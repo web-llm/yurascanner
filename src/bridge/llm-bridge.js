@@ -37,11 +37,11 @@ class LLMBridge {
         if (!program.opts().manual) {
             // Setup LLM API
             this.openai = new OpenAI({
-                apiKey: this.model.includes('gpt') ? process.env.OPENAI_API_KEY : 'na',
+                apiKey: process.env.OPENAI_API_KEY,
                 baseURL: program.opts().modelEndpoint
             });
         }
-        
+
         this.tokenUsageCallback = null;
     }
 
